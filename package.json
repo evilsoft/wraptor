@@ -1,0 +1,25 @@
+{
+  "name": "wraptor",
+  "version": "0.0.1",
+  "description": "Just a little wrapper to make a given function observable",
+  "main": "wraptor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evilsoft/wraptor.git"
+  },
+  "keywords": [
+    "RFP",
+    "reactive",
+    "functional",
+    "streams"
+  ],
+  "author": "Ian Hofmann-Hicks <evilsoft@aol.com> (evil)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evilsoft/wraptor/issues"
+  },
+  "homepage": "https://github.com/evilsoft/wraptor#readme"
+}
