@@ -7,5 +7,35 @@
     root['wraptor'] = factory()
   }
 }(this, function() {
-  return { connected: true }
-})
+  return function wraptor(fn) {
+    const subs = []
+    const done = false
+
+    function subscribe(o) {
+      if(subs.indexOf(o) === -1) {
+        subs.push(o)
+      }
+
+      return {
+        closed: () => done,
+        unsubscribe() {
+          const idx = subs.indexOf(o)
+          if(idx !== -1) { subs.splice(idx, 1) }
+        }
+      }
+    }
+
+    function ObservableFunction(x) {
+      const y = fn(x)
+      subs.forEach(s => s.next(y))
+    }
+
+    ObservableFunction[Symbol.observable] = () => {
+      return { subscribe }
+    }
+
+    ObservableFunction.subscribe = subscribe
+
+    return ObservableFunction
+  }
+}))
