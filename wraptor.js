@@ -12,8 +12,10 @@
     const done = false
 
     function subscribe(o) {
-      if(subs.indexOf(o) === -1) {
-        subs.push(o)
+      if(subs.indexOf(o) === -1) { subs.push(o) }
+
+      if(!(o && typeof o.next === 'function')) {
+        throw new TypeError('Invalid Observer Passed to subscribe')
       }
 
       return {

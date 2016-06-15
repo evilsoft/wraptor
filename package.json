@@ -4,7 +4,8 @@
   "description": "Just a little wrapper to make a given function observable",
   "main": "wraptor.js",
   "scripts": {
-    "test": "tape wraptor.test.js | tap-spec"
+    "test": "tape wraptor.test.js | tap-spec",
+    "spec": "nodemon -q -e js -x 'npm test'"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/evilsoft/wraptor#readme",
   "devDependencies": {
+    "nodemon": "^1.9.2",
     "tap-spec": "^4.1.1",
     "tape": "^4.5.1"
   }
