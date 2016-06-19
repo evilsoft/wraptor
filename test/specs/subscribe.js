@@ -3,10 +3,10 @@ const wraptor = require('../../wraptor')
 
 const { noop, bindFunc, validObserver } = require('../helpers')
 
-test('invalid input to subscribe throws TypeError', t => {
-  const o = wraptor(noop)
-  const s = bindFunc(o.subscribe)
+const o = wraptor(noop)
+const s = bindFunc(o.subscribe)
 
+test('invalid input to subscribe throws TypeError', t => {
   t.throws(s(), TypeError, 'nothing')
 
   t.throws(s(null), TypeError, 'null')
@@ -26,9 +26,6 @@ test('invalid input to subscribe throws TypeError', t => {
 })
 
 test('valid input to subscribe does not throw', t => {
-  const o = wraptor(noop)
-  const s = bindFunc(o.subscribe)
-
   t.doesNotThrow(s(validObserver()), 'valid Observer')
   t.end()
 })
