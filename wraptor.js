@@ -8,14 +8,21 @@
   }
 }(this, function() {
   return function wraptor(fn) {
-    const subs = []
-    const done = false
+    if(!(fn && typeof fn === 'function')) {
+      throw new TypeError('Must provide a function to wrap')
+    }
+
+    const safeFn  = fn.bind(null)
+    const subs    = []
+    const done    = false
 
     function subscribe(o) {
-      if(subs.indexOf(o) === -1) { subs.push(o) }
-
       if(!(o && typeof o.next === 'function')) {
-        throw new TypeError('Invalid Observer Passed to subscribe')
+        throw new TypeError('Invalid Observer passed to subscribe')
+      }
+
+      if(subs.indexOf(o) === -1) {
+        subs.push(o)
       }
 
       return {
@@ -28,8 +35,7 @@
     }
 
     function ObservableFunction(x) {
-      const y = fn(x)
-      subs.forEach(s => s.next(y))
+      subs.forEach(s => s.next(safeFn(x)))
     }
 
     ObservableFunction[Symbol.observable] = () => {
