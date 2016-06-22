@@ -35,7 +35,8 @@
     }
 
     function ObservableFunction(x) {
-      subs.forEach(s => s.next(safeFn(x)))
+      const _val = safeFn(x)
+      subs.forEach(s => s.next(_val))
     }
 
     ObservableFunction[Symbol.observable] = () => {
