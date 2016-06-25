@@ -1,7 +1,9 @@
 const test    = require('tape')
 const wraptor = require('../../wraptor')
+const helpers = require('../helpers')
 
-const { noop, bindFunc } = require('../helpers')
+const noop      = helpers.noop
+const bindFunc  = helpers.bindFunc
 
 const w     = bindFunc(wraptor)
 const func  = wraptor(noop)

@@ -1,7 +1,10 @@
 const test    = require('tape')
 const wraptor = require('../../wraptor')
+const helpers = require('../helpers')
 
-const { noop, bindFunc, validObserver } = require('../helpers')
+const noop          = helpers.noop
+const bindFunc      = helpers.bindFunc
+const validObserver = helpers.validObserver
 
 const s = bindFunc(wraptor(noop).subscribe)
 

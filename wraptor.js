@@ -7,8 +7,24 @@
     root['wraptor'] = factory()
   }
 }(this, function() {
+  const slice = Array.prototype.slice
+
+  function isFunction(fn) {
+    return (fn && typeof fn === 'function')
+  }
+
+  function notifyNext(x, o) { o.next(x) }
+
+  function notifyError(err, o) {
+    if(isFunction(o.error)) {
+      o.error(err)
+    } else {
+      throw err
+    }
+  }
+
   return function wraptor(fn) {
-    if(!(fn && typeof fn === 'function')) {
+    if(!(isFunction(fn))) {
       throw new TypeError('Must provide a function to wrap')
     }
 
@@ -16,27 +32,35 @@
     const subs    = []
     const done    = false
 
+    function unsubscribe(o) {
+      const idx = subs.indexOf(o)
+      if(idx !== -1) { subs.splice(idx, 1) }
+    }
+
     function subscribe(o) {
-      if(!(o && typeof o.next === 'function')) {
+      if(!(o && isFunction(o.next))) {
         throw new TypeError('Invalid Observer passed to subscribe')
       }
 
-      if(subs.indexOf(o) === -1) {
-        subs.push(o)
-      }
+      if(subs.indexOf(o) === -1) { subs.push(o) }
 
       return {
-        closed: () => done,
-        unsubscribe() {
-          const idx = subs.indexOf(o)
-          if(idx !== -1) { subs.splice(idx, 1) }
-        }
+        closed,
+        unsubscribe: unsubscribe.bind(null, o)
       }
     }
 
-    function ObservableFunction(x) {
-      const _val = safeFn(x)
-      subs.forEach(s => s.next(_val))
+    function ObservableFunction() {
+      if(subs.length) {
+        const args = slice.call(arguments)
+
+        try {
+          const _val = safeFn.apply(null, args)
+          subs.forEach(notifyNext.bind(null, _val))
+        } catch(e) {
+          subs.forEach(notifyError.bind(null, e))
+        }
+      }
     }
 
     ObservableFunction[Symbol.observable] = () => {
