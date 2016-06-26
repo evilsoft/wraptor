@@ -30,6 +30,21 @@ test('subscribed Observers are notified with result', t => {
   func(result)
 })
 
+test('only notifies subscribers when wrapped function is fully applied', t => {
+  const func      = wraptor((x, y) => x + y)
+  const observer  = { next: sinon.spy() }
+
+  func.subscribe(observer)
+
+  func(1)
+  t.equal(observer.next.called, false, 'not notified on partial apply')
+
+  func(1, 1)
+  t.equal(observer.next.called, true, 'notified on full apply')
+
+  t.end()
+})
+
 test('unsubscribed observers do not receive notifications', t => {
   const func          = wraptor(noop)
   const observer      = { next: sinon.spy() }
